@@ -1,5 +1,6 @@
 package org.serratec.backend.projeto04.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -38,7 +39,11 @@ public class BookService {
 		
 	}
 	public void delete(Integer id) {
-		repository.deleteById(id);
+		repository.findById(id);
+	}
+	
+	public List<BookEntity> orderBy(String orderType){
+		return repository.findAll(Sort.by(orderType));
 	}
 	
 }
