@@ -24,30 +24,32 @@ public class BookController {
 	BookService service;
 	
 	@GetMapping("/livro")
-	public List<BookEntity> findAll() {
-		return service.getAll();
+	public ResponseEntity<List<BookEntity>> findAll() {
+		return new ResponseEntity<List<BookEntity>>(service.getAll(),HttpStatus.OK);
 	}
 	@GetMapping("/livro/")
 	public ResponseEntity<List<BookEntity>> orderBy(@RequestParam String order){
 		return new ResponseEntity<List<BookEntity>>(service.orderBy(order),HttpStatus.OK);
 	}
 	@GetMapping("/livro/{id}")	
-	public BookEntity findById(@PathVariable Integer id) throws BookNotFoundException {
-		return service.getById(id);
+	public ResponseEntity<BookEntity> findById(@PathVariable Integer id) throws BookNotFoundException {
+		return new ResponseEntity<BookEntity>(service.getById(id),HttpStatus.OK);
 	}
 	@PostMapping("/livro")
-	public String create(@RequestBody BookEntity book) {
+	public ResponseEntity<String> create(@RequestBody BookEntity book) {
 		service.create(book);
-		return "Criado com sucesso";
+		return new ResponseEntity<String>("Criado com sucesso!",HttpStatus.OK);
+		
 	}
 	@PutMapping("/livro/{id}")
-	public String update(@PathVariable Integer id, @RequestBody BookEntity book) throws BookNotFoundException {
+	public ResponseEntity<String> update(@PathVariable Integer id, @RequestBody BookEntity book) throws BookNotFoundException {
 		service.update(id, book);
-		return "Alterado com sucesso.";
+		return new ResponseEntity<String>("Alterado com sucesso.",HttpStatus.OK);
 	}
 	@DeleteMapping("/livro/{id}")
-	public void delete(@PathVariable Integer id) {
+	public ResponseEntity<String> delete(@PathVariable Integer id) throws BookNotFoundException {
 		service.delete(id);
+		return new ResponseEntity<String>("Deletado com sucesso!",HttpStatus.OK);
 	}
 	
 }

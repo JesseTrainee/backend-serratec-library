@@ -1,6 +1,5 @@
 package org.serratec.backend.projeto04.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,11 +18,18 @@ public class BookService {
 	
 	public void create(BookEntity book) {
 		repository.save(book);
+		
 	}
 	
-	public void update(Integer id,BookEntity book) throws BookNotFoundException {
-		BookEntity book2 = getById(id);
-		repository.save(book2);
+		public void update(Integer id,BookEntity bookTemp) throws BookNotFoundException {
+		BookEntity book = getById(id);	
+		if(bookTemp.getTitle() != null) {
+			book.setTitle(bookTemp.getTitle());
+		}
+		if(bookTemp.getAuthor() != null) {
+			book.setAuthor(bookTemp.getAuthor());
+		}
+		repository.save(book);
 	}
 	
 	public List<BookEntity> getAll() {
@@ -38,8 +44,12 @@ public class BookService {
 		return book.get();
 		
 	}
-	public void delete(Integer id) {
-		repository.findById(id);
+	public void delete(Integer id) throws BookNotFoundException {
+		Optional<BookEntity> book = repository.findById(id);
+		if(book.isEmpty()) {
+			throw new BookNotFoundException("Não existe livro com esse id!");
+		}
+		repository.deleteById(id);
 	}
 	
 	public List<BookEntity> orderBy(String orderType){
